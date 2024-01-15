@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import BIGINT, Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
 import datetime
@@ -9,8 +9,8 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    kakao_id = Column(String, unique=True, index=True)
+    id = Column(BIGINT, primary_key=True)
+    kakao_id = Column(BIGINT, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.datetime.now())
@@ -18,9 +18,9 @@ class User(Base):
 class PriceLog(Base):
     __tablename__ = "price_logs"
     id = Column(Integer, primary_key=True)
-    price = Column(Integer)
-
-    items = relationship("Product", back_populates="price_logs")
+    price = Column(BIGINT)
+    product_id = Column(Integer, ForeignKey("products.id"))
+    product = relationship("Product", backref="price_logs")
     created_at = Column(DateTime, default=datetime.datetime.now())
 
 
